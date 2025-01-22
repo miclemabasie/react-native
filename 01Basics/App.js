@@ -6,7 +6,9 @@ import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const [goalText, setgoalText] = useState("");
-  const [goals, setGoals] = useState([{ text: "Learing React", id: "32" }]);
+  const [goals, setGoals] = useState([
+    { text: "Learing React and makin progress", id: "32" },
+  ]);
   const [modalIsVisible, setmodalIsVisible] = useState(false);
 
   function startAddGoalHandler() {
