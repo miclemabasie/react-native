@@ -2,17 +2,24 @@ import { View, Text, TextInput, StyleSheet } from "react-native";
 import React from "react";
 import CustomButton from "./CustomButton";
 
-const DailogBox = ({}) => {
+const DailogBox = ({ handleHighGuess, handleLowGuess }) => {
+  function handleHigh() {
+    handleHighGuess();
+  }
+
+  function handleLow() {
+    handleLowGuess();
+  }
   return (
     <View style={style.inputContainer}>
       <Text style={style.label}>Higher or Lower?</Text>
 
       <View style={style.btnContainer}>
         <View>
-          <CustomButton title="-" style={style.btn} />
+          <CustomButton title="-" style={style.btn} onPress={handleLow} />
         </View>
         <View>
-          <CustomButton title="+" style={style.btn} />
+          <CustomButton title="+" style={style.btn} onPress={handleHigh} />
         </View>
       </View>
     </View>

@@ -1,8 +1,20 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import CustomButton from "./CustomButton";
 
 const InputBox = ({ handleSecretOnChange, onPressConfirm }) => {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleInputChange = (text) => {
+    setInputValue(text); // Update the local state
+    handleSecretOnChange(parseInt(text, 10)); // Pass the number to the parent handler
+  };
+
+  const handleReset = () => {
+    setInputValue(""); // Clear the local state
+    handleSecretOnChange(0); // Reset the secret number
+  };
+
   return (
     <View style={style.inputContainer}>
       <Text style={style.label}>Enter a number:</Text>
@@ -11,15 +23,19 @@ const InputBox = ({ handleSecretOnChange, onPressConfirm }) => {
         keyboardType="numeric" // Ensures only numbers can be entered
         placeholder="Type here"
         placeholderTextColor="#aaa"
-        onChangeText={handleSecretOnChange}
+        value={inputValue} // Controlled input
+        onChangeText={handleInputChange} // Handle input changes
       />
 
       <View style={style.btnContainer}>
         <View>
-          <CustomButton title="Reset" />
+          <CustomButton title="Reset" onPress={handleReset} />
         </View>
         <View>
-          <CustomButton title="Confirm" onPress={onPressConfirm} />
+          <CustomButton
+            title="Confirm"
+            onPress={() => onPressConfirm(parseInt(inputValue, 10))}
+          />
         </View>
       </View>
     </View>
@@ -44,7 +60,7 @@ const style = StyleSheet.create({
     marginBottom: 10,
   },
   input: {
-    width: "20%",
+    width: "100%",
     height: 40,
     borderBottomWidth: 1,
     borderBottomColor: "#fff",
@@ -52,10 +68,8 @@ const style = StyleSheet.create({
     fontSize: 16,
     textAlign: "center", // Center the text input
   },
-
   btnContainer: {
     width: 200,
-
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 20,

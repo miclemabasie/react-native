@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 
-const ComputerGuess = ({ value }) => {
+const ComputerGuess = ({ value, secret }) => {
+  //   console.log("this is the secret", secret);
   return (
     <View style={style.guessContainer}>
       <Text style={style.guess}>{value}</Text>
