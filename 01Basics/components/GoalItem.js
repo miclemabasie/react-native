@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 
   goalText: {
     color: "white",
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
   },
 });

@@ -8,15 +8,15 @@ import DailogBox from "./components/DailogBox";
 import GuessItem from "./components/GuessItem";
 
 export default function App() {
-  const [secret, setSecret] = useState(null); // The user's secret number
-  const [newGuess, setNewGuess] = useState(0); // The computer's current guess
-  const [guessCount, setGuessCount] = useState(0); // Number of guesses made
-  const [guesses, setGuesses] = useState([]); // List of all guesses
-  const [enterGuess, setEnterGuess] = useState(true); // Toggle input/game screen
-  const [bannerText, setBannerText] = useState("Guess  y Number"); // Banner text
-  const [min, setMin] = useState(1); // Minimum bound for guessing
-  const [max, setMax] = useState(100); // Maximum bound for guessing
-  const [playing, setPlaying] = useState(true); // Maximum bound for guessing
+  const [secret, setSecret] = useState(null);
+  const [newGuess, setNewGuess] = useState(0);
+  const [guessCount, setGuessCount] = useState(0);
+  const [guesses, setGuesses] = useState([]);
+  const [enterGuess, setEnterGuess] = useState(true);
+  const [bannerText, setBannerText] = useState("Guess  y Number");
+  const [min, setMin] = useState(1);
+  const [max, setMax] = useState(100);
+  const [playing, setPlaying] = useState(true);
 
   // Helper to generate a random integer in a given range
   function getRandomInt(min, max) {
@@ -25,13 +25,12 @@ export default function App() {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  // Function to start the game after user sets their secret number
   function startGame(secretNumber) {
-    setSecret(secretNumber); // Save the user's secret number
-    setBannerText("Opponent's Guess"); // Update the banner
-    setEnterGuess(false); // Switch to game screen
-    const initialGuess = getRandomInt(min, max); // Generate the first guess
-    makeGuess(initialGuess); // Start the guessing process
+    setSecret(secretNumber);
+    setBannerText("Opponent's Guess");
+    setEnterGuess(false);
+    const initialGuess = getRandomInt(min, max);
+    makeGuess(initialGuess);
   }
 
   // Make a guess and update the state
@@ -47,10 +46,10 @@ export default function App() {
   // Handle a "Too Low" response
   function handleLowGuess() {
     setMin((prevMin) => {
-      const updatedMin = newGuess + 1; // Exclude the current guess
+      const updatedMin = newGuess + 1;
       const nextGuess = generateNewGuess(updatedMin, max);
       makeGuess(nextGuess);
-      return updatedMin; // Update state
+      return updatedMin;
     });
   }
 
@@ -64,7 +63,6 @@ export default function App() {
     });
   }
 
-  // Generate a new guess within the range, avoiding duplicates
   function generateNewGuess(min, max) {
     let guess;
     do {
@@ -73,7 +71,6 @@ export default function App() {
     return guess;
   }
 
-  // React when the computer's guess matches the secret number
   useEffect(() => {
     if (!enterGuess && newGuess === secret) {
       setBannerText("You won!");
@@ -86,7 +83,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Banner text={bannerText} />
+      {playing && <Banner text={bannerText} />}
 
       {enterGuess ? (
         <InputBox
@@ -102,7 +99,9 @@ export default function App() {
               handleLowGuess={handleLowGuess}
             />
           ) : (
-            <Text>You won</Text>
+            <Banner
+              text={`You guess the number: ${secret} in ${guessCount} trials.`}
+            />
           )}
         </>
       )}
@@ -114,8 +113,6 @@ export default function App() {
           <GuessItem guess={item.value} guessCount={index + 1} />
         )}
       />
-
-      <StatusBar style="auto" />
     </View>
   );
 }
