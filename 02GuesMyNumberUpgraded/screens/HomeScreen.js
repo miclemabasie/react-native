@@ -1,7 +1,7 @@
 import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
-import CustomButton from "../components/CustomButton";
+import CustomButton from "../components/ui/CustomButton";
 import { useState } from "react";
-import { Colors } from "../constants/colors";
+import Colors from "../constants/colors";
 
 function HomeScreen({ onPickedNumber }) {
   const [secretValue, setSecretValue] = useState("");
@@ -33,11 +33,12 @@ function HomeScreen({ onPickedNumber }) {
 
   return (
     <View style={styles.inputArea}>
+      <Text style={styles.instructionText}>Enter a number</Text>
       <TextInput
         keyboardType="number-pad"
         style={styles.input}
         maxLength={2}
-        placeholderTextColor="#ddb52f"
+        placeholderTextColor={Colors.accent500}
         value={secretValue}
         onChangeText={secretValueHandler}
       />
@@ -79,10 +80,10 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginBottom: 20,
-    color: "#ddb52f",
+    color: Colors.accent500,
     textAlign: "center",
     borderBottomWidth: 1,
-    borderColor: "#ddb52f",
+    borderColor: Colors.accent500,
     fontSize: 20,
     fontWeight: "bold",
   },
@@ -108,6 +109,11 @@ const styles = StyleSheet.create({
   },
 
   confirmButton: {
-    backgroundColor: "#3b6e22",
+    backgroundColor: Colors.secondaryBtn,
+  },
+
+  instructionText: {
+    color: Colors.accent500,
+    fontFamily: "open-sans",
   },
 });

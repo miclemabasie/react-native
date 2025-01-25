@@ -1,25 +1,77 @@
 import { StyleSheet, ImageBackground, SafeAreaView } from "react-native";
 import HomeScreen from "./screens/HomeScreen";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import GameScreen from "./screens/GameScreen";
+import GameOver from "./screens/GameOver";
+import Colors from "./constants/colors";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [userNumber, setUserNumber] = useState();
+  const [gameOver, setGameOver] = useState(false);
+  const [gameRounds, setGameRounds] = useState(0);
+
+  const [loaded, error] = useFonts({
+    "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+    "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
 
   function startGameHandler(selectedNumber) {
-    console.log("this is the selected", selectedNumber);
     setUserNumber(selectedNumber);
+  }
+
+  function updateGameRounds(rounds) {
+    setGameRounds(rounds);
+  }
+
+  function handNewGame() {
+    console.log("reseting the game");
+    setUserNumber(null);
+    setGameRounds(0);
+    setGameOver(true);
   }
 
   let screen = <HomeScreen onPickedNumber={startGameHandler} />;
 
-  if (userNumber) {
-    screen = <GameScreen />;
+  if (userNumber && !gameOver) {
+    screen = (
+      <GameScreen
+        secret={userNumber}
+        secretHandler={startGameHandler}
+        gameOverHandler={setGameOver}
+        updateGameRounds={updateGameRounds}
+      />
+    );
+  } else if (gameOver && userNumber) {
+    // show the game over screen
+    console.log(gameOver, userNumber);
+    screen = (
+      <GameOver
+        rounds={gameRounds}
+        secret={userNumber}
+        onStartNewGame={handNewGame}
+      />
+    );
   }
+  useEffect(() => {
+    setGameOver(false);
+  }, [userNumber]);
 
   return (
-    <LinearGradient colors={["#4e0329", "#ddb52f"]} style={style.rootScreen}>
+    <LinearGradient
+      colors={[Colors.primary600, Colors.accent500]}
+      style={style.rootScreen}
+    >
       <ImageBackground
         source={require("./assets/images/samedice.jpg")}
         resizeMode="cover"
